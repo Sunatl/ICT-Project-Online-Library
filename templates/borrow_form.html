@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if borrow %}Edit{% else %}Borrow{% endif %} Book{% endblock %}
+
+{% block content %}
+    <section class="borrow-form">
+        <div class="container">
+            <h2 class="form-title">{% if borrow %}Edit{% else %}Borrow{% endif %} Book</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}

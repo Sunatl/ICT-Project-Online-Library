@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Borrow Entry{% endblock %}
+
+{% block content %}
+    <section class="borrow-delete">
+        <div class="container">
+            <h2>Are you sure you want to delete the borrow entry for {{ borrow.book.title }}?</h2>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'borrow-list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,221 @@
+.a1{
+    display: flex;
+}
+/* Main container styles */
+.aaaa1{
+    margin-left: 30px;
+    
+}
+.a1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f4f7fc;
+}
+.sasa{
+    margin-left: 93px;
+}
+
+/* Full-page background */
+body {
+    background-color: #f4f7fc;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Card container */
+.card {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 25px;
+    display: flex;
+}
+
+/* Form field inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Focus state for inputs */
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button styling */
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+/* Error messages */
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+/* Responsive settings */
+@media (max-width: 768px) {
+    .a1 {
+        padding: 15px;
+    }
+    .card {
+        padding: 20px;
+    }
+    .btn-submit {
+        width: 100%;
+    }
+}
+
+/* Title styling */
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Container for form submission message */
+.text-center {
+    text-align: center;
+}
+
+/* Success link text color */
+.text-success {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Image section styles */
+.mt-5 {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+}
+.doctor-image{
+    margin-bottom: 100px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+/* Container for links */
+.text-center a {
+    text-decoration: none;
+}
+
+/* Custom margins */
+.mb-5 {
+    margin-bottom: 40px;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}
+
+/* Custom Padding */
+.p-4 {
+    padding: 20px;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-3 {
+    border-radius: 12px;
+}
+
+/* Form submission button position */
+.d-flex {
+    display: flex;
+    justify-content: center;
+}
+
+/* Additional styling for the sign-up form */
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Input text placeholders */
+input::placeholder, select::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* Adding a footer section for additional links or messages */
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 14px;
+    color: #888;
+}
+.header{
+display: none;
+}
+.sasa{
+    text-decoration: none;
+}
+.doctor-image{
+    width: 530px;
+    height: 600px;
+}
+/* Footer links */
+.footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Additional hover effects for the submit button */
+.btn-submit:active {
+    background-color: #004085;
+}
+/* Adjust spacing for smaller screens */
+@media (max-width: 576px) {
+    .a1 {
+        padding: 10px;
+    }
+    .card {
+        max-width: 100%;
+    }
+}
+

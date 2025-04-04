@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<!-- Link to external stylesheet -->
+<link rel="stylesheet" href="{% static 'main.css' %}">
+
+<div class="a1">
+    <div class="container  mt-5">
+        
+        <div class="card shadow-lg p-4 mb-5 rounded-3 flex">
+            <h1 class="text-primary mb-5 text-center">Login</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-submit">Submit</button>
+                </div>
+            </form>
+            
+
+                <!-- Submit Button -->
+
+                <hr>
+        <!-- Forgot Password and Google Sign-In Links -->
+<div class="d-flex justify-content-between">
+    <a class="sasa text-decoration-none" href="{% url 'password_reset' %}">
+        Forgot password
+    </a>
+    <a class="aaaa1 text-decoration-none text-primary" href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={{ google_callback_uri }}&prompt=consent&response_type=code&client_id={{ google_client_id }}&scope=openid%20email%20profile&access_type=offline">
+        Sign in with Google
+    </a>
+</div>
+
+        </div>
+        <div class="mt-5 text-center">
+            <img class='doctor-image' src="{% static 'images/image.jpg' %}" alt="Sign up illustration" class="img-fluid">
+        </div>
+    </div>
+
+        <!-- Link to Login for existing users -->
+        <div class="text-center mt-3">
+            <p>Already have an account? <a href="{% url 'home' %}" class="text-decoration-none text-success">Home</a></p>
+        </div>
+    </div>
+
+    <!-- Image Section -->
+
+{% endblock %}

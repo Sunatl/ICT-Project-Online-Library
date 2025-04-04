@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Books List{% endblock %}
+
+{% block content %}
+    <section class="book-list">
+        <div class="container">
+            <div class="section-title">
+                <h2>Books Collection</h2>
+                <div class="action-buttons">
+                    {% if user.is_staff %}
+                    <h3>Total Price: {{ total_value }}</h2>
+                    <h3>Total Stock: {{ total_stock }}</h3>
+
+
+                        <a href="{% url 'book-create' %}" class="btn btn-success">
+                            <i class="fas fa-plus me-1"></i>Add New Book
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <form method="get" class="form-inline mb-4">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Search by title, author..." 
+                               value="{{ request.GET.search }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-1"></i>Search
+                            </button>
+                            {% if request.GET.search %}
+                                <a href="{% url 'book-list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-1"></i>Clear
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="books">
+                {% for book in books %}
+                    <div class="book-card">
+                        {% if book.cover %}
+                            <div class="book-cover">
+                                <img src="{{ book.cover.url }}" alt="{{ book.title }} cover">
+                            </div>
+                        {% endif %}
+                        <div class="book-info">
+                            <h3><a href="{% url 'book-detail' book.id %}">{{ book.title }}</a></h3>
+                            <p class="author">by {{ book.author.name }}</p>
+                            <p class="genre">Genre: {{ book.grade.name }}</p>
+                            <p class="description">{{ book.description|truncatewords:20 }}</p>
+                            
+                            <div class="book-meta">
+                                <span class="price">Price: ${{ book.price }}</span>
+                                <span class="stock">Stock: {{ book.stock }}</span>
+                            </div>
+                            {% if book.stock >= 1 %}
+
+                            <div class="book-actions">
+                                <a href="{% url 'book-detail' book.pk %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-info-circle me-1"></i>Details
+                                </a>
+                            {% else %}
+                            <div class="book-actions">
+
+                                <!-- If stock is less than 1, show the "Kitob nest" message -->
+                                    <p class="text-muted">Not book</p>
+                            {% endif %}
+                                {% if user.is_staff %}
+                                    <a href="{% url 'book-update' book.pk %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </a>
+                                    <a href="{% url 'book-delete' book.pk %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="no-results">
+                        <i class="fas fa-book-open fa-3x mb-3"></i>
+                        <h3>No books found</h3>
+                        <p>Try adjusting your search criteria or browse our complete collection.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

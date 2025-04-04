@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Logged Out{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-5 text-center" style="max-width: 500px; width: 100%; border-radius: 15px; background-color: #ffffff; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+        <div class="card-body">
+            <div class="mb-4">
+                <img src="{% static 'images/logout-illustration.svg' %}" alt="Logout Illustration" style="max-width: 150px; margin-bottom: 20px;">
+            </div>
+            <h2 class="text-dark mb-3" style="font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600;">You’ve successfully logged out</h2>
+            <p class="lead mb-4" style="font-size: 1.1rem; color: #6c757d;">We hope to see you back soon!</p>
+            <p class="mb-4" style="font-size: 1rem; color: #495057;">If you'd like to log in again, click the button below:</p>
+            <a href="{% url 'login/ssh' %}" class="btn btn-outline-primary btn-lg px-5 py-3" style="font-size: 1.1rem; font-weight: 500; border-radius: 30px; text-transform: uppercase;">
+                Log In Again
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

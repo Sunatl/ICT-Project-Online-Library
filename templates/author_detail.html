@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ author.name }} - Author Detail{% endblock %}
+
+{% block content %}
+    <section class="author-detail">
+        <div class="container">
+            <div class="author-header">
+                <div class="author-info">
+                    <h1>{{ author.name }}</h1>
+                    <p>{{ author.biography }}</p>
+                    <a href="{% url 'author-update' author.pk %}" class="btn btn-danger">Update</a>
+                    <a href="{% url 'author-delete' author.pk %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'base' %}" class="btn btn-danger">Home</a>
+                </div>
+                <!-- Pass the author pk to the URL -->
+            </div> <br><br>
+            <h2>Books by {{ author.name }}</h2>
+            <ul class="author-books">
+                {% for book in author.books.all %}
+                    <li><a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a></li>
+                {% empty %}
+                    <p>No books available.</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+{% endblock %}

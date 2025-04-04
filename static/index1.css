@@ -1,0 +1,149 @@
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    @import url("https://fonts.googleapis.com/css?family=Fredoka+One");
+
+    /* * {
+        box-sizing: border-box;
+    } */
+    body {
+        height: 100vh;
+        width: 100%;
+    
+        font-family: "Fredoka One", cursive;
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .footer{
+        margin-bottom: 210px;
+        margin-right: 100px;
+        
+    }
+    .alik{
+        margin-left: 400px;
+        margin-top: 100px;
+    }
+    .loader {
+        width: 30vw;
+        text-align: center;
+    
+        * {
+            transition: 0.3s;
+        }
+        .progress {
+            width: 100%;
+            height: 0.5rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 5rem;
+            margin: 0.5rem 0;
+            overflow: hidden;
+    
+            .current {
+                background: black;
+                height: 100%;
+    
+                animation: progress 5s ease-in-out;
+                animation-fill-mode: forwards;
+            }
+        }
+        .icon {
+            height: 5vw;
+            position: relative;
+            text-align: left;
+            svg {
+                position: absolute;
+                height: 5vw;
+                width: auto;
+    
+                animation: position 5s ease-in-out;
+                animation-fill-mode: forwards;
+            }
+        }
+        .info {
+            letter-spacing: 3px;
+            font-size: 1.25rem;
+        }
+        .error {
+            transform: scale(0);
+            transition-delay: 0.5s;
+            
+            p+p{
+                font-size:0.9rem;
+                color: #37474F;
+            }
+            a {
+                display: block;
+                height: 24px;
+                width: 24px;
+                background: black;
+                border-radius: 50%;
+                margin: 0.5rem auto;
+    
+                svg {
+                    fill: white;
+                }
+            }
+        }
+    }
+    
+    .timeout .loader {
+        .progress {
+            transform: scale(0);
+        }
+        .icon svg {
+            transform: scale(0);
+        }
+        .info {
+            transform: scaley(0);
+        }
+        .error {
+            transform: scale(1) translatey(-4rem);
+        }
+        .footer {
+            opacity: 0;
+        }
+    }
+    
+    @keyframes position {
+        0% {
+            left: -10%;
+        }
+        25% {
+            left: 15%;
+        }
+        50% {
+            left: 30%;
+        }
+        100% {
+            left: 70%;
+        }
+    }
+    
+    @keyframes progress {
+        0% {
+            width: 0%;
+        }
+        25% {
+            width: 25%;
+        }
+        50% {
+            width: 40%;
+        }
+        100% {
+            width: 80%;
+        }
+    }
+    
+    .footer {
+        position: fixed;
+        bottom: 1rem;
+    
+        font-size: 0.65rem;
+    
+        transition: 0.3s;
+    
+        a {
+            color: black;
+        }
+    }
+    

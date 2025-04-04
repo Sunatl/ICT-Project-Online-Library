@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Genre - {{ genre.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle text-warning fa-3x"></i>
+                    </div>
+                    <h2 class="card-title mb-4">Delete Genre</h2>
+                    <p class="lead text-muted mb-4">
+                        Are you sure you want to delete the genre "{{ genre.name }}"?
+                    </p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This action cannot be undone. All books in this genre will need to be reassigned.
+                    </div>
+                    
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{% url 'grade-list' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg px-4">
+                                <i class="fas fa-trash me-2"></i>Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+    }
+    .alert {
+        border-radius: 10px;
+    }
+    .fas {
+        width: 16px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
