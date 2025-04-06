@@ -27,7 +27,8 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     is_actives = models.BooleanField(default=False)  
-
+    school = models.ForeignKey("School", on_delete=models.SET_NULL, null=True, blank=True)
+    
     def __str__(self):
         return f"{self.username} ({self.grade.name if self.grade else 'No Grade'})"
 
@@ -146,6 +147,7 @@ class Purchase(models.Model):
     purchase_date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(default=1)  
     price_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    school = models.ForeignKey("School", on_delete=models.SET_NULL, null=True, blank=True)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE,related_name="grade",null=True,blank=True)
     is_paid = models.BooleanField(default=False)
 

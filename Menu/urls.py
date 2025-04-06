@@ -31,7 +31,12 @@ urlpatterns = [
     path('purchases/<int:pk>/update/', PurchaseUpdateView.as_view(), name='purchase-update'),
     path('purchases/<int:pk>/delete/', PurchaseDeleteView.as_view(), name='purchase-delete'),
     path('purchases/<int:pk>/', PurchaseDetailView.as_view(), name='purchase-detail'),  # Detail View
-        # Қадами 1: Синф ва китоб интихоб
+    # School
+    path('schools/', SchoolListView.as_view(), name='school-list'),
+    path('schools/create', create_school, name='school-form'),
+
+
+    # Қадами 1: Синф ва китоб интихоб
     path('purchase/bulk/step1/', BulkPurchaseStepOneView.as_view(), name='bulk-purchase-step-1'),
 
     # Қадами 2: Талабаҳо ва сабти харидҳо

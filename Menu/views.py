@@ -208,7 +208,7 @@ from django.shortcuts import render
 from django.views import View
 from .models import School, StudentBook
 
-class SchoolListView(View):
+class SchoolListView(ListView):
     def get(self, request):
         schools = School.objects.all()
         school_data = []
@@ -227,6 +227,19 @@ class SchoolListView(View):
             'school_data': school_data
         }
         return render(request, 'school_list.html', context)
+    
+
+from .forms import SchoolForm
+def create_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('school-list')  # Change to your school list view name
+    else:
+        form = SchoolForm()
+    
+    return render(request, 'school_form.html', {'form': form})
 
 
 class BookListView(ListView):
