@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h4>Қадами 1: Китоб ва синфро интихоб кунед</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary">Ба қадами 2 гузаштан</button>
+    </form>
+</div>
+{% endblock %}

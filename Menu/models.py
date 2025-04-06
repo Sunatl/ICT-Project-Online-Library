@@ -5,14 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 
-class School(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.TextField()
-    phone_number = models.CharField(max_length=15)
-    date = models.DateField(default=timezone.now)
 
-    def __str__(self):
-        return self.name
     
 class Category(models.Model):
     title = models.CharField(max_length=255)
@@ -111,6 +104,40 @@ class Book(models.Model):
 
     def is_in_stock(self):
         return self.stock > 0
+    
+    
+class School(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Номи мактаб")
+    address = models.TextField(verbose_name="Нақшаи мактаб")
+    phone_number = models.CharField(max_length=15, verbose_name="Рақами телефон")
+    date = models.DateField(default=timezone.now, verbose_name="Таърихи таъсисёбӣ")
+    books = models.ForeignKey(Book, related_name='schools',null=True, blank=True, verbose_name="Китобҳои мактаб", on_delete=models.CASCADE)
+    students_book = models.ForeignKey(CustomUser, related_name='books',null=True, blank=True, verbose_name="Китобҳое, ки аз ҷониби донишҷӯён гирифта шудаанд",on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Мактаб"
+        verbose_name_plural = "Мактабҳо"
+
+
+# Модели StudentBook (Миёна барои пайваст кардани донишҷӯён ва китобҳо)
+class StudentBook(models.Model):
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Донишҷӯ")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name="Китоб")
+    quantity = models.PositiveIntegerField(default=1, verbose_name="Миқдори китоб")
+    borrowed_at = models.DateTimeField(auto_now_add=True, verbose_name="Вақти гирифтани китоб")
+    school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name="Мактаб")  # ForeignKey ба School илова карда шуд
+
+    def __str__(self):
+        return f"{self.student.username} - {self.book.title} ({self.quantity} китоб)"
+
+    class Meta:
+        verbose_name = "Китоби донишҷӯ"
+        verbose_name_plural = "Китобҳои донишҷӯён"
+
+
 
 
 class Purchase(models.Model):
@@ -118,8 +145,9 @@ class Purchase(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="purchases")
     purchase_date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(default=1)  
-    price_paid = models.DecimalField(max_digits=10, decimal_places=2)  
-    is_paid = models.BooleanField(default=False)  
+    price_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE,related_name="grade",null=True,blank=True)
+    is_paid = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.student.username} - {self.book.title} ({'Paid' if self.is_paid else 'Not Paid'})"
@@ -157,15 +185,20 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment of {self.amount_paid} by {self.student.username} for {self.purchase.book.title} on {self.payment_date}"
-
     def save(self, *args, **kwargs):
-        wallet = self.student.wallet  
-        if wallet.balance >= self.amount_paid:
-            wallet.subtract_balance(self.amount_paid)
-            self.status = 'completed'  
-            super().save(*args, **kwargs)  
-        else:
-            raise ValueError("Insufficient funds in the wallet")
+            wallet = self.student.wallet  # wallet-и донишҷӯ
+            if wallet.balance >= self.amount_paid:
+                wallet.subtract_balance(self.amount_paid)  # Аз донишҷӯ маблағро мегирем
+
+                # Ба роҳбари синф (ё фурӯшанда) маблағ медиҳем
+                class_leader_wallet = self.purchase.class_leader.wallet  
+                class_leader_wallet.balance += self.amount_paid
+                class_leader_wallet.save()
+
+                self.status = 'completed'
+                super().save(*args, **kwargs)
+            else:
+                raise ValueError("Insufficient funds in the wallet")
 
 def create_payment(purchase):
     if purchase.is_paid:  
