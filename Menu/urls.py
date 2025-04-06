@@ -3,9 +3,12 @@ from .views import *
 
 urlpatterns = [
     path('Home', Base.as_view(), name='base'),
+    path('Home1', Base1.as_view(), name='base1'),
     path('', Home.as_view(), name='home'),
     path('logout/', user_logout, name='logout'),
     path('login/', LoginPage.as_view(), name='login/ssh'),
+    path('loginvm/', LoginPage1.as_view(), name='loginvm'),
+    path('schools/', SchoolListView.as_view(), name='school_list'),
 
 
     # URL-ҳои Grade
@@ -28,6 +31,11 @@ urlpatterns = [
     path('purchases/<int:pk>/update/', PurchaseUpdateView.as_view(), name='purchase-update'),
     path('purchases/<int:pk>/delete/', PurchaseDeleteView.as_view(), name='purchase-delete'),
     path('purchases/<int:pk>/', PurchaseDetailView.as_view(), name='purchase-detail'),  # Detail View
+        # Қадами 1: Синф ва китоб интихоб
+    path('purchase/bulk/step1/', BulkPurchaseStepOneView.as_view(), name='bulk-purchase-step-1'),
+
+    # Қадами 2: Талабаҳо ва сабти харидҳо
+    path('purchase/bulk/step2/', BulkPurchaseStepTwoView.as_view(), name='bulk-purchase-step-2'),
 
     # URL-ҳои Wallet
     path('wallets/', WalletListView.as_view(), name='wallet-list'),

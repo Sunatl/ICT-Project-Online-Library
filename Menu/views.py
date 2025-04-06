@@ -61,6 +61,9 @@ def user_logout(request):
 # Base and Home pages
 class Base(TemplateView):
     template_name = "base.html"
+# Base and Home pages
+class Base1(TemplateView):
+    template_name = "base1.html"
 
 class Home(TemplateView):
     template_name = "home.html"
@@ -163,7 +166,34 @@ class LoginPage(View):
                 "google_client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
             },
         )
+class LoginPage1(View):
+    def get(self, request, *args, **kwargs):
+        form = AuthenticationForm()
+        return render(
+            request,
+            "registration/loginvm.html",
+            {
+                "form": form,
+                "google_callback_uri": settings.GOOGLE_OAUTH_CALLBACK_URL,
+                "google_client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
+            },
+        )
 
+    def post(self, request, *args, **kwargs):
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect("school_list")  # Ба саҳифаи хона пайваст кунед
+        return render(
+            request,
+            "registration/loginvm.html",
+            {
+                "form": form,
+                "google_callback_uri": settings.GOOGLE_OAUTH_CALLBACK_URL,
+                "google_client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
+            },
+        )
 
 class GradeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Grade
@@ -174,6 +204,29 @@ class GradeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         # Only allow staff members to delete grades
         return self.request.user.is_staff
 
+from django.shortcuts import render
+from django.views import View
+from .models import School, StudentBook
+
+class SchoolListView(View):
+    def get(self, request):
+        schools = School.objects.all()
+        school_data = []
+
+        for school in schools:
+            student_books_count = StudentBook.objects.filter(school=school).count()
+            books_count = StudentBook.objects.filter(school=school).values('book').distinct().count()
+
+            school_data.append({
+                'school': school,
+                'student_books_count': student_books_count,
+                'books_count': books_count,
+            })
+
+        context = {
+            'school_data': school_data
+        }
+        return render(request, 'school_list.html', context)
 
 
 class BookListView(ListView):
@@ -350,6 +403,84 @@ class PurchaseDetailView(DetailView):
 
 
     
+
+
+from django.views import View
+from django.shortcuts import render, redirect
+from .forms import ClassBookSelectForm
+from .models import CustomUser, Purchase, Book, Grade
+from django.views import View
+from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Book, Grade, CustomUser, Purchase
+from .forms import ClassBookSelectForm
+
+class BulkPurchaseStepOneView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ClassBookSelectForm()
+        return render(request, 'bulk_purchase_step1.html', {'form': form})
+
+    def post(self, request):
+        form = ClassBookSelectForm(request.POST)
+        if form.is_valid():
+            # Захиракунии ID-ҳо, то сериализатсия шавад
+            request.session['purchase_data'] = {
+                'book_id': form.cleaned_data['book'].id,
+                'grade_id': form.cleaned_data['grade'].id,
+                'quantity': form.cleaned_data['quantity']
+            }
+            return redirect('bulk-purchase-step-2')
+        return render(request, 'bulk_purchase_step1.html', {'form': form})
+
+class BulkPurchaseStepTwoView(LoginRequiredMixin, View):
+    def get(self, request):
+        data = request.session.get('purchase_data')
+        if not data:
+            return redirect('bulk-purchase-step-1')
+
+        grade = Grade.objects.get(id=data['grade_id'])
+        students = CustomUser.objects.filter(grade=grade)
+        return render(request, 'bulk_purchase_step2.html', {
+            'students': students,
+            'book_id': data['book_id'],
+            'quantity': data['quantity'],
+        })
+
+    def post(self, request):
+        data = request.session.get('purchase_data')
+        if not data:
+            return redirect('bulk-purchase-step-1')
+
+        book = Book.objects.get(id=data['book_id'])
+        quantity = int(data['quantity'])
+        grade = Grade.objects.get(id=data['grade_id'])
+        students = CustomUser.objects.filter(grade=grade)
+
+        for student in students:
+            if request.POST.get(f"student_{student.id}") == 'on':
+                total_price = quantity * book.price
+
+                if book.stock < quantity:
+                    continue  # Ё нишон додани огоҳӣ
+
+                # Захираи китоб кам шавад
+                book.reduce_stock(quantity)
+
+                # Баланс ҳамчун қарз илова шавад
+                student.wallet.add_balance(total_price)
+
+                # Харид сабт шавад (is_paid=False)
+                Purchase.objects.create(
+                    student=student,
+                    book=book,
+                    quantity=quantity,
+                    price_paid=total_price,
+                    grade=grade,
+                    is_paid=False
+                )
+
+        return redirect('purchase-list')
+
 
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = Purchase
