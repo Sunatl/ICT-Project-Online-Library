@@ -12,7 +12,7 @@ class GradeAdmin(admin.ModelAdmin):
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'grade', 'phone_number')  # Намоиш дар рӯйхат
     search_fields = ('username', 'email',)  # Ҷустуҷӯ
-    list_filter = ('grade',)  # Филтр бо синф
+    list_filter = ('grade','school')  # Филтр бо синф
 
 # Танзими Wallet дар админ
 @admin.register(Wallet)
